@@ -8,7 +8,7 @@ class Home extends React.Component {
     return (
       html({},
         body({},
-          main({ id: 'main' }, 'Hello World'),
+          main({ id: 'main' }, this.props.title),
           script({ src: 'index.js' }))))
   }
 }

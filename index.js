@@ -12,6 +12,6 @@ app.use(bdm({ src: __dirname + '/client', intercept: (b) => {
   b.transform("babelify", {presets: ["es2015"]})
 }}))
 app.get('/', (req, res) => {
-  res.render('home')
+  res.render('layout', { child: 'home' })
 })
 app.listen(5000, () => console.log("Listening on 5000"))

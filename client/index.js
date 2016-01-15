@@ -1,4 +1,4 @@
 import Home from '../components/home'
-import render from 'react-dom'
+import { render } from 'react-dom'
 
-render(Home, document.getElementById('main'))
+// render(Home(), document.getElementById('main'))
