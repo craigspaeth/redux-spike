@@ -4,7 +4,8 @@
   "description": "Spike project to better understand Redux",
   "main": "index.js",
   "scripts": {
-    "start": "babel-node --presets es2015 index.js"
+    "start": "babel-node --presets es2015 index.js",
+    "test": "standard"
   },
   "repository": {
     "type": "git",
