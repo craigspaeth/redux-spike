@@ -1,6 +1,6 @@
 import React from 'react'
 import Radium from 'Radium'
-import Chatbar from './chatbar'
+import Chatbar from 'components/chatbar'
 let { html, body, main, script } = React.DOM
 
 class Home extends React.Component {

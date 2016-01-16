@@ -3,15 +3,16 @@ import express from 'express'
 import React from 'react'
 import bdm from 'browserify-dev-middleware'
 import babelify from 'babelify'
-import componentRender from './lib/component-render'
+import Layout from 'components/layout'
+import { renderToString } from 'react-dom/server'
 
+let { PORT } = process.env
 let app = express()
 
-app.use(componentRender)
 app.use(bdm({ src: __dirname + '/client', intercept: (b) => {
   b.transform("babelify", {presets: ["es2015"]})
 }}))
 app.get('/', (req, res) => {
-  res.render('layout', { child: 'home' })
+  res.send(renderToString(Layout({ child: 'home', title: 'Hello World' })))
 })
-app.listen(5000, () => console.log("Listening on 5000"))
+app.listen(PORT, () => console.log(`Listening on ${PORT}`))
