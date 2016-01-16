@@ -1,10 +1,9 @@
 import React from 'react'
-import Radium from 'radium'
-import Chatbar from 'components/chatbar'
 import rewire from 'rewire'
 import path from 'path'
+import reset from './reset'
 
-let { html, body, main, script } = React.DOM
+let { html, body, main, script, head, link } = React.DOM
 let { NODE_ENV } = process.env
 let r = NODE_ENV == 'production' ? require : rewire
 
@@ -14,10 +13,12 @@ class Layout extends React.Component {
     let comp = r(fname).default(this.props)
     return (
       html({},
+        head({},
+          link({ src: reset })),
         body({},
           main({ id: 'main' }, comp),
           script({ src: 'index.js' }))))
   }
 }
 
-export default (props) => React.createElement(Radium(Layout), props)
+export default (props) => React.createElement(Layout, props)

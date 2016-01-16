@@ -1,16 +1,25 @@
 import React from 'react'
-import Radium from 'Radium'
 import Chatbar from 'components/chatbar'
-let { html, body, main, script } = React.DOM
+import store from 'store'
+
+let { div, li, ul } = React.DOM
 
 class Home extends React.Component {
+
+  constructor() {
+    super()
+   this.state = store.getState()
+  }
+
+  componentDidMount() {
+    store.subscribe(() => this.setState(store.getState()))
+  }
+
   render () {
-    return (
-      html({},
-        body({},
-          main({ id: 'main' }, this.props.title),
-          script({ src: 'index.js' }))))
+    return div({},
+      ul({}, this.state.chats.map((chat) => li({}, chat))),
+      Chatbar({}))
   }
 }
 
-export default (props) => React.createElement(Radium(Home), props)
+export default (props) => React.createElement(Home, props)
