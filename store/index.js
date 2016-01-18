@@ -8,7 +8,7 @@ let debug = d('redux')
 
 let reducers = {
   SUBMIT_CHAT(state, action) {
-    state.chats.push(state.currentUserName + ': ' + action.message)
+    state.chats.push({ message: action.message, name: state.currentUserName })
     state.chatInputValue = ''
   },
   NEW_CHATS(state, action) {

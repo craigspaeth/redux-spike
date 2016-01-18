@@ -25,7 +25,9 @@ class Home extends React.Component {
     return (
     div({},
       AuthModal({}),
-      ul({}, this.state.chats.map((chat, i) => li({ key: i }, chat))),
+      ul({}, this.state.chats.map((chat, i) => {
+        return li({ key: i }, chat.name + ': ' + chat.message)
+      })),
       Chatbar({}))
     )
   }

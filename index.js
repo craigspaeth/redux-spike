@@ -11,12 +11,13 @@ import esv from 'express-react-views'
 import bdm from 'browserify-dev-middleware'
 import createStore from 'store'
 import _ from 'lodash'
+import api from 'api'
+import request from 'superagent'
 
-let { PORT, NODE_ENV } = process.env
+let { PORT, NODE_ENV, API_URL } = process.env
 let app = express()
 let server = http.createServer(app)
 let io = socket(server)
-let db = { chats: [] }
 
 // Set up sharify
 sharify.data = _.pick(process.env, 'DEBUG')
@@ -40,22 +41,31 @@ if (NODE_ENV == 'development') {
 }
 
 // Index route
-app.get('/', (req, res) => {
-  let store = createStore(db)
-  res.locals.sd.INITIAL_STATE = store.getState()
-  res.send(renderToString(Layout({
-    child: Home,
-    title: 'Hi',
-    store: store,
-    sharify: res.locals.sharify
-  })))
+app.get('/', (req, res, next) => {
+  request.get(API_URL + '/chats').end((err, sres) => {
+    if (err) return next(err)
+    let store = createStore({ chats: sres.body })
+    res.locals.sd.INITIAL_STATE = store.getState()
+    res.send(renderToString(Layout({
+      child: Home,
+      title: 'Hi',
+      store: store,
+      sharify: res.locals.sharify
+    })))
+  })
 })
 
 // Start server & sockets
+app.use('/api', api)
 server.listen(PORT, () => console.log(`Listening on ${PORT}`))
 io.on('connection', (socket) => {
   socket.on('SUBMIT_CHAT', ({ message, from }) => {
-    db.chats.push(`${from}: ${message}`)
-    io.emit('NEW_CHATS', { chats: db.chats })
+    request
+      .post(API_URL + '/chats').send({ message: message, name: from })
+      .end((err, res) => {
+        request.get(API_URL + '/chats').end((err, res) => {
+          if (!err) io.emit('NEW_CHATS', { chats: res.body })
+        })
+      })
   })
 })
