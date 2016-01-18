@@ -1,6 +1,5 @@
 import React from 'react'
 import Radium from 'Radium'
-import store from 'store'
 
 let { input, div } = React.DOM
 
@@ -12,7 +11,7 @@ class Chatbar extends React.Component {
         input({
           style: Object.assign({}, styles.divinput, styles.input),
           placeholder: 'Type in a chat',
-          onKeyUp: this.submitChat,
+          onKeyUp: this.submitChat.bind(this),
           ref: 'input' }))
     )
   }
@@ -23,10 +22,14 @@ class Chatbar extends React.Component {
 
   submitChat(e) {
     if (e.which != 13) return
-    store.dispatch({ type: 'SUBMIT_CHAT', message: e.target.value })
+    this.context.store.dispatch({
+      type: 'SUBMIT_CHAT',
+      message: e.target.value
+    })
     this.refs.input.focus()
   }
 }
+Chatbar.contextTypes = { store: React.PropTypes.object }
 
 let styles = {
   divinput: {

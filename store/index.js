@@ -1,13 +1,23 @@
 import { createStore } from 'redux'
+import socket from 'client/socket'
+import _ from 'lodash'
+import { camelize } from 'underscore.string'
 
-let initialState = { chats: ['Hello'] }
-let store = createStore((state = initialState, action) => {
-  let s = Object.assign({}, state)
-  switch (action.type) {
-  case 'SUBMIT_CHAT':
-    s.chats.push(action.message)
+let reducers = {
+  submitChat(state, action) {
+    state.chats.push(action.message)
+  },
+  setState(state, action) {
+    _.assign(state, action.state)
   }
-  return s
-})
+}
 
-export default store
+export default (initialState) => {
+  return createStore((state = initialState, action) => {
+    if (socket) socket.emit(action.type, _.omit(action, 'type'))
+    let fn = reducers[camelize(action.type.toLowerCase())]
+    let s = _.clone(state)
+    if (fn) fn(s, action)
+    return s
+  })
+}
