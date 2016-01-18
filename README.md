@@ -2,6 +2,10 @@
 
 Spike project to better understand Redux
 
+* `nvm install 5 && nvm use 5`
+* `npm install`
+* `npm start`
+
 ## Thoughts on stack
 
 ### Architecture
