@@ -1,5 +1,6 @@
 import React from 'react'
 import Chatbar from 'components/chatbar'
+import AuthModal from 'components/auth-modal'
 
 let { div, li, ul } = React.DOM
 
@@ -21,10 +22,12 @@ class Home extends React.Component {
   }
 
   render () {
-    return div({},
-      div({}, 'Hello World'),
-      ul({}, this.state.chats.map((chat) => li({}, chat))),
+    return (
+    div({},
+      AuthModal({}),
+      ul({}, this.state.chats.map((chat, i) => li({ key: i }, chat))),
       Chatbar({}))
+    )
   }
 }
 Home.childContextTypes = { store: React.PropTypes.object }

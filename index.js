@@ -10,6 +10,7 @@ import sharify from 'sharify'
 import esv from 'express-react-views'
 import bdm from 'browserify-dev-middleware'
 import createStore from 'store'
+import _ from 'lodash'
 
 let { PORT, NODE_ENV } = process.env
 let app = express()
@@ -18,6 +19,7 @@ let io = socket(server)
 let db = { chats: [] }
 
 // Set up sharify
+sharify.data = _.pick(process.env, 'DEBUG')
 app.use(sharify)
 
 // Hot reloading for server & client
@@ -52,8 +54,8 @@ app.get('/', (req, res) => {
 // Start server & sockets
 server.listen(PORT, () => console.log(`Listening on ${PORT}`))
 io.on('connection', (socket) => {
-  socket.on('SUBMIT_CHAT', ({ message }) => {
-    db.chats.push(message)
-    io.emit('SET_STATE', { state: db })
+  socket.on('SUBMIT_CHAT', ({ message, from }) => {
+    db.chats.push(`${from}: ${message}`)
+    io.emit('NEW_CHATS', { chats: db.chats })
   })
 })

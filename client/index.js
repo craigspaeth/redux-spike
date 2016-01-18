@@ -8,8 +8,6 @@ import _ from 'lodash'
 
 let store = createStore(sd.INITIAL_STATE)
 
+localStorage.debug = sd.DEBUG
 render(Home({ title: 'Hi', store: store }), document.getElementById('main'))
-socket.on('*', (event, data) => {
-  console.log('moo', event, data)
-  store.dispatch(_.assign({ type: event }, data))
-})
+socket.on('*', (event, data) => store.dispatch(_.assign({ type: event }, data)))
