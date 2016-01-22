@@ -23,8 +23,8 @@ Spike project to better understand Redux
 _in order of most likely more useful than annoying_
 
 1. Promises and/or Generators to better catch/bubble/trace async errors
-2. [Immutable data](https://github.com/facebook/immutable-js/)
-3. [Linting tool](https://github.com/feross/standard)
+2. [Linting tool](https://github.com/feross/standard)
+3. [Immutable data](https://github.com/facebook/immutable-js/)
 4. [Type inferencing tool](http://flowtype.org/)
 5. [Fuzzing](https://www.npmjs.com/package/fuzzer)
 6. Type saftey using Typescript or the like
